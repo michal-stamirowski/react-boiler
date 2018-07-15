@@ -1,17 +1,20 @@
-import HtmlWebPackPlugin from 'html-webpack-plugin';
-import nodeExternals from 'webpack-node-externals';
-import path from 'path';
+const HtmlWebPackPlugin = require('html-webpack-plugin')
+let nodeExternals = require('webpack-node-externals');
+let path = require('path');
 
 const moduleObj = {
-    loaders: [
+    rules: [
         {
-            test: /\.js$/,
-            exclude: /node_modules/,
-            loaders: ["babel-loader"],
+          test: /\.js$/,
+          exclude: /node_modules/,
+          use: {
+            loader: 'babel-loader'
+          }
         }
-    ],
+      ]
 };
 const client = {
+  mode: "development",
   entry: {
     'client': './src/client/index.js'
   },
@@ -28,6 +31,7 @@ const client = {
   ]
 }
 const server = {
+    mode: "development",
     entry: {
         'server': './src/server/index.js'
     },
