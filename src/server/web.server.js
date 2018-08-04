@@ -1,20 +1,16 @@
 import express from 'express';
-import mysql from 'mysql';
+import Sequelize  from 'sequelize';
 
 export default class WebServer {
   constructor () {
     this.app = express(),
     this.app.use(express.static('dist/public')),
-    this.db = mysql.createConnection({
-      host: "localhost",
-      user: "yourusername",
-      password: "yourpassword"
-    });
+    this.sequelize = new Sequelize("mysql://root:password@localhost:3306/react")
   }
+  
   start () {
     return new Promise((resolve, reject) => {
       try {
-        console.log(this.server);
         this.server = this.app.listen(3000, function () {
           resolve()
         })
@@ -24,6 +20,7 @@ export default class WebServer {
       }
     })
   }
+
   stop () {
     return new Promise((resolve, reject) => {
       try {
@@ -32,18 +29,42 @@ export default class WebServer {
         })
       } catch (error) {
         console.error(error.message)
-        reject(error)
       }
     })
   }
-  // conectDb () {
-  //   return new Promise((resolve, reject) => {
-  //     try {
-  //       this.db.connect(() => resolve());
-  //     } catch (error) {
-  //       console.error(error.message);
-  //       reject();
-  //     }
-  //   })
-  // }
+
+  connectDb () {
+    return  this.sequelize.authenticate();
+  }
+
+  createUser () {
+    const User = this.sequelize.define('user', {
+      id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true
+      },
+      firstName: {
+        type: Sequelize.STRING
+      },
+      lastName: {
+        type: Sequelize.STRING
+      }
+    })
+    
+    User.sync({force: true}).then(() => {
+
+      return User.create({
+        id: 1,
+        firstName: 'John',
+        lastName: 'Hancock'
+      });
+    }).then(() => {
+
+      return User.findAll({
+        where: {
+          id: 1
+        }
+      }).then(user => console.log(user))
+    })
+  }  
 }
