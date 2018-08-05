@@ -4,7 +4,7 @@ import path from 'path';
 import HtmlWebPackPlugin from 'html-webpack-plugin';
 import CleanWebpackPlugin from 'clean-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import NodemonPlugin from 'nodemon-webpack-plugin';
+import { NodeServerPlugin }  from 'webpack-node-server-plugin';
 //EXTERNALS
 import nodeExternals from 'webpack-node-externals';
 
@@ -26,10 +26,6 @@ const client = {
   mode: "development",
   entry: {
     'client': './src/client/index.js'
-  },
-  devServer: {
-    contentBase: './dist',
-    hot: true
   },
   target: 'web',
   output: {
@@ -64,7 +60,7 @@ const server = {
     },
     module: modules,
     plugins: [
-      new NodemonPlugin()
+      new NodeServerPlugin()
     ],
     externals: [nodeExternals()]
 }
