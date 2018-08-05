@@ -5,7 +5,7 @@ export default class WebServer {
   constructor () {
     this.app = express(),
     this.app.use(express.static('dist/public')),
-    this.sequelize = new Sequelize("mysql://root:password@localhost:3306/react")
+    this.sequelize = new Sequelize("postgres://root:password@localhost:5432/react")
   }
   
   start () {
