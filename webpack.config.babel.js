@@ -23,7 +23,7 @@ const modules = {
 };
 
 const client = {
-  mode: "development",
+  mode: 'development',
   entry: {
     'client': './src/client/index.js'
   },
@@ -36,12 +36,22 @@ const client = {
   resolve: {
     extensions: ['*', '.js', '.jsx']
   },
+  devServer: {
+    contentBase: path.join(__dirname, 'dist/public'),
+    port: 3000,
+    open: true,
+    hot: true,
+    proxy: {
+        '/api': 'http://localhost:4000'
+    }
+  },
   plugins: [
     new HtmlWebPackPlugin({
-      template: 'src/client/index.html'
+      template: 'src/client/index.html',
+      favicon: ''
     }),
     new MiniCssExtractPlugin({
-      filename: "styles.css"
+      filename: 'styles.css'
   }),
     new CleanWebpackPlugin('dist'),
     new webpack.HotModuleReplacementPlugin()
@@ -49,7 +59,7 @@ const client = {
   watch: true
 }
 const server = {
-    mode: "development",
+    mode: 'development',
     entry: {
         'server': './src/server/index.js'
     },
